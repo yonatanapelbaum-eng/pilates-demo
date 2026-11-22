@@ -54,14 +54,12 @@ function countdown(diff: number) {
   return m === 0 ? `מתחיל בעוד ${hours}` : `מתחיל בעוד ${hours} ו-${m} דקות`;
 }
 
-const bookHref = (slot: Slot, day: number) =>
-  waLink(scheduleSection.bookMessage(classTypes[slot.type].short, days[day].long, slot.time));
 
 function BookButton({ slot, day, tone = "sand" }: { slot: Slot; day: number; tone?: "sand" | "cream" | "ink" }) {
   const toneClass = tone === "ink" ? "btn-ink" : tone === "cream" ? "btn-cream" : "bg-sand text-ink hover:bg-blush";
   return (
     <a
-      href={bookHref(slot, day)}
+      href={waLink()}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`${scheduleSection.bookLabel}: ${classTypes[slot.type].short}, יום ${days[day].long}, ${slot.time}`}
@@ -107,7 +105,7 @@ export default function Schedule() {
   const maxRows = Math.max(...schedule.map((s) => s.length));
 
   return (
-    <section id="schedule" data-own-whatsapp aria-labelledby="schedule-title" className="px-4 py-24 md:px-8 lg:py-40">
+    <section id="schedule" data-hide-float aria-labelledby="schedule-title" className="px-4 py-14 md:px-8 lg:py-24">
       <div className="mx-auto max-w-page">
         <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
           <h2 id="schedule-title" data-reveal className="text-title">
@@ -115,7 +113,7 @@ export default function Schedule() {
           </h2>
 
           {/* The live line: what's next, counted down in Israel time. */}
-          <div data-reveal aria-live="polite" className="mt-8 min-h-[112px] lg:mt-0 lg:min-w-[520px]">
+          <div data-reveal aria-live="polite" className="mt-6 min-h-[112px] lg:mt-0 lg:min-w-[520px]">
             {next && (
               <div className="flex flex-col gap-4 rounded-panel bg-blush p-5 sm:flex-row sm:items-center sm:justify-between sm:rounded-full sm:py-4 sm:pl-4 sm:pr-7">
                 <div>
@@ -138,7 +136,7 @@ export default function Schedule() {
         {isSaturday && <p className="mt-6 font-semibold">{scheduleSection.saturdayNote}</p>}
 
         {/* Legend */}
-        <ul data-reveal className="mt-10 flex flex-wrap gap-x-6 gap-y-3 lg:mt-14" aria-label="סוגי שיעורים">
+        <ul data-reveal className="mt-8 flex flex-wrap gap-x-6 gap-y-3 lg:mt-12" aria-label="סוגי שיעורים">
           {Object.entries(classTypes).map(([key, c]) => (
             <li key={key} className="flex items-center gap-2 text-small font-semibold">
               <span className={`block h-2.5 w-6 rounded-full ${c.dot}`} aria-hidden="true" />

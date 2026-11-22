@@ -4,32 +4,41 @@ import { teamSection } from "@/data/studio";
 export default function Team() {
   return (
     <section id="team" aria-labelledby="team-title" className="px-2.5 md:px-5">
-      <div className="rounded-panel bg-ink px-6 py-20 text-cream md:px-10 lg:px-16 lg:py-32">
-        <div className="mx-auto max-w-page">
+      <div className="rounded-panel bg-ink py-14 text-cream lg:py-24">
+        <div className="mx-auto max-w-page px-6 md:px-10 lg:px-16">
           <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
             <h2 id="team-title" data-reveal className="text-title">
               {teamSection.title}
             </h2>
-            <p data-reveal className="mt-4 max-w-[34ch] text-lead lg:mt-0">
+            <p data-reveal className="mt-3 max-w-[34ch] lg:mt-0 lg:text-lead">
               {teamSection.intro}
             </p>
           </div>
-
-          <ul className="mt-14 grid gap-16 sm:grid-cols-2 lg:mt-20 lg:grid-cols-3 lg:gap-12">
-            {teamSection.members.map((m, i) => (
-              <li key={m.name} className={i === 1 ? "lg:mt-20" : i === 2 ? "lg:mt-10" : ""}>
-                <div data-reveal className="relative mx-auto aspect-[3/4] w-[78%] overflow-hidden rounded-full bg-sand sm:w-full lg:w-[88%]">
-                  <Image src={m.image} alt={m.alt} fill sizes="(min-width: 1024px) 28vw, (min-width: 640px) 45vw, 78vw" className="object-cover" />
-                </div>
-                <div data-reveal className="mt-7 text-center lg:mt-8">
-                  <h3 className="text-lead">{m.name}</h3>
-                  <p className="mt-1 text-small font-bold text-sage">{m.role}</p>
-                  <p className="mx-auto mt-3 max-w-[32ch]">{m.text}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
         </div>
+
+        {/* Phone: swipe through the instructors; desktop: three across. */}
+        <ul
+          data-reveal
+          aria-label="המדריכות"
+          className="mx-auto mt-8 flex max-w-page snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-6 px-6 pb-2 [scrollbar-width:none] md:px-10 lg:mt-12 lg:grid lg:grid-cols-3 lg:gap-10 lg:overflow-visible lg:px-16 [&::-webkit-scrollbar]:hidden"
+        >
+          {teamSection.members.map((m) => (
+            <li key={m.name} className="w-[85%] shrink-0 snap-start sm:w-[60%] lg:w-auto">
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl bg-sand">
+                <Image
+                  src={m.image}
+                  alt={m.alt}
+                  fill
+                  sizes="(min-width: 1024px) 30vw, 85vw"
+                  className="object-cover object-[50%_25%]"
+                />
+              </div>
+              <h3 className="mt-5 text-lead">{m.name}</h3>
+              <p className="mt-1 text-small font-bold text-sage">{m.role}</p>
+              <p className="mt-2 max-w-[36ch]">{m.text}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );

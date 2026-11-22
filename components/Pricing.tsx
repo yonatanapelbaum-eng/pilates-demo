@@ -13,7 +13,7 @@ export default function Pricing() {
   const [choice, setChoice] = useState<Record<string, number>>({});
 
   return (
-    <section id="pricing" data-own-whatsapp aria-labelledby="pricing-title" className="pb-24 lg:pb-40">
+    <section id="pricing" data-hide-float aria-labelledby="pricing-title" className="py-14 lg:py-24">
       <div className="mx-auto max-w-page px-4 md:px-8">
         <h2 id="pricing-title" data-reveal className="text-title">
           {pricingSection.title}
@@ -21,17 +21,16 @@ export default function Pricing() {
       </div>
 
       {/* Three plans as three flat fields meeting at hard edges. The middle one is wider and in the accent. */}
-      <div className="mt-12 grid lg:mt-16 lg:grid-cols-[1fr_1.4fr_1fr]">
+      <div className="mt-8 grid lg:mt-12 lg:grid-cols-[1fr_1.4fr_1fr]">
         {pricingSection.plans.map((plan, i) => {
           const f = fields[i];
           const sel = choice[plan.id] ?? 0;
           const opt = plan.options[sel];
-          const message = plan.id === "monthly" ? plan.message(opt.label, opt.price) : plan.message("", opt.price);
           return (
             <article
               key={plan.id}
               aria-labelledby={`plan-${plan.id}`}
-              className={`${f.ground} flex flex-col px-6 py-12 md:px-10 lg:min-h-[520px] lg:px-10 lg:py-14 xl:px-14`}
+              className={`${f.ground} flex flex-col px-6 py-10 md:px-10 lg:min-h-[480px] lg:px-10 lg:py-14 xl:px-14`}
             >
               <div data-reveal className="flex flex-wrap items-center gap-3">
                 <h3 id={`plan-${plan.id}`} className="text-lead">
@@ -77,7 +76,7 @@ export default function Pricing() {
               <div data-reveal className="mt-auto pt-10">
                 <p className="max-w-[32ch]">{plan.text}</p>
                 <a
-                  href={waLink(message)}
+                  href={waLink()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`btn ${f.button} mt-6 w-full`}

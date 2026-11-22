@@ -3,7 +3,7 @@ import { Carriages, InstagramIcon, WhatsAppIcon } from "./Icons";
 
 export default function Footer() {
   return (
-    <footer data-own-whatsapp className="bg-sand px-4 pb-16 pt-20 md:px-8 lg:pb-12 lg:pt-28">
+    <footer data-hide-float className="bg-sand px-4 pb-32 pt-14 md:px-8 lg:pb-24 lg:pt-20">
       <div className="mx-auto max-w-page">
         {/* The name returns at full width, built from the same capsule as everything else. */}
         <div aria-hidden="true" className="flex items-end justify-between gap-6">
@@ -16,7 +16,7 @@ export default function Footer() {
           <Carriages className="mb-[2vw] hidden flex-col sm:flex [&>span]:h-[1.6vw] [&>span]:w-[9vw] [&>span]:max-w-[150px] [&>span]:min-h-[10px]" />
         </div>
 
-        <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-12 lg:gap-8">
+        <div className="mt-10 grid gap-8 lg:mt-14 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-4">
             <p className="font-display text-lead font-medium">{studio.name}</p>
             <p className="font-semibold">{studio.tagline}</p>
@@ -60,7 +60,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 text-small lg:mt-20 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mt-10 flex flex-col gap-4 text-small lg:mt-14 lg:flex-row lg:items-end lg:justify-between">
           <ul className="flex flex-col">
             {credits.map((cr) => (
               <li key={cr.href}>

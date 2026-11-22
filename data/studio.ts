@@ -13,8 +13,6 @@ export const studio = {
   address: "רחוב סוקולוב 24, רמת השרון",
   phoneDisplay: "050-000-0000",
   phoneHref: "tel:+972500000000",
-  whatsapp: "972500000000", // בלי + ובלי מקפים
-  whatsappDefault: "היי, אשמח לפרטים על שיעור ניסיון",
   instagram: "https://instagram.com/",
   mapQuery: "סוקולוב 24 רמת השרון",
   maxPerClass: 8,
@@ -25,6 +23,14 @@ export const studio = {
   ],
 };
 
+// ── וואטסאפ ────────────────────────────────────────────────
+// כל כפתורי הוואטסאפ באתר פותחים את אותו מספר עם אותה הודעה.
+// לאתר של לקוחה אמיתית: להחליף כאן את המספר וההודעה.
+export const whatsapp = {
+  number: "972524204525", // בלי + ובלי מקפים
+  message: "היי יונתן, ראיתי את אתר הדוגמה של סטודיו ליה ואשמח לשמוע על אתר כזה לסטודיו שלי",
+};
+
 export const seo = {
   title: "סטודיו ליה | פילאטיס בוטיק ברמת השרון",
   description:
@@ -32,9 +38,9 @@ export const seo = {
   ogAlt: "סטודיו פילאטיס בהיר עם מכשיר רפורמר, וילונות לבנים וקשתות",
 };
 
-/** קישור וואטסאפ עם הודעה מוכנה */
-export const waLink = (text: string = studio.whatsappDefault) =>
-  `https://wa.me/${studio.whatsapp}?text=${encodeURIComponent(text)}`;
+/** קישור וואטסאפ עם ההודעה הקבועה. extra (לא חובה) מתווסף בשורה חדשה, למשל פרטים מהטופס. */
+export const waLink = (extra?: string) =>
+  `https://wa.me/${whatsapp.number}?text=${encodeURIComponent(extra ? `${whatsapp.message}\n\n${extra}` : whatsapp.message)}`;
 
 // ── תמונות ─────────────────────────────────────────────────
 // src: נתיב מקומי (public/images) או כתובת images.unsplash.com
@@ -44,20 +50,24 @@ export const images = {
     alt: "סטודיו פילאטיס בהיר עם מכשיר רפורמר, וילונות לבנים וקירות בצורת קשת",
   },
   reformer: {
-    src: "/images/reformer-window.jpg",
-    alt: "מתאמנת עומדת על מכשיר רפורמר ליד חלון גדול, עם משקולות קטנות בידיים",
+    src: "/images/reformer-window-class.jpg",
+    alt: "מתאמנת על מכשיר רפורמר בסטודיו מואר מול חלונות גדולים",
+    position: "75% 50%",
   },
   mat: {
-    src: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=1200&q=75",
-    alt: "קבוצה קטנה של נשים מתרגלות על מזרנים ורודים בסטודיו מואר",
+    src: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=1200&q=75",
+    alt: "מתאמנת יושבת על מזרן בסטודיו בהיר מול קיר לבן",
+    position: "50% 50%",
   },
   barre: {
-    src: "https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?w=1200&q=75",
-    alt: "מתאמנת במתיחה עמוקה על מזרן בחדר מואר עם צמחים",
+    src: "/images/barre-class.jpg",
+    alt: "שתי מתאמנות בתרגול ליד מוט בלט בסטודיו לבן",
+    position: "50% 50%",
   },
   prenatal: {
-    src: "https://images.unsplash.com/photo-1552196563-55cd4e45efb3?w=1200&q=75",
-    alt: "אישה יושבת בשקט על מזרן מול קיר לבן ונושמת",
+    src: "https://images.unsplash.com/photo-1493894473891-10fc1e5dbd22?w=1200&q=75",
+    alt: "אישה בהריון מחזיקה ידיים בצורת לב על הבטן",
+    position: "50% 45%",
   },
 };
 
@@ -193,8 +203,6 @@ export const scheduleSection = {
   bookLabel: "להרשמה",
   nextLabel: "השיעור הבא",
   saturdayNote: "בשבת הסטודיו סגור. זו המערכת של יום ראשון.",
-  bookMessage: (type: string, day: string, time: string) =>
-    `היי, אשמח להירשם לשיעור ${type} ביום ${day} ב-${time}`,
 };
 
 // ── מחירון ─────────────────────────────────────────────────
@@ -207,7 +215,6 @@ export const pricingSection = {
       text: "שיעור ראשון במכשירים, כולל היכרות קצרה.",
       options: [{ label: "", price: 60, period: "לשיעור" }],
       cta: "לשיעור ניסיון",
-      message: () => "היי, אשמח לקבוע שיעור ניסיון במכשירים ב-60 ₪",
     },
     {
       id: "monthly",
@@ -219,8 +226,6 @@ export const pricingSection = {
         { label: "3 פעמים בשבוע", price: 620, period: "לחודש" },
       ],
       cta: "להצטרפות",
-      message: (option: string, price: number) =>
-        `היי, אשמח להצטרף למנוי חודשי, ${option} (${price} ₪)`,
     },
     {
       id: "pack",
@@ -228,7 +233,6 @@ export const pricingSection = {
       text: "בתוקף 4 חודשים, לכל סוגי השיעורים.",
       options: [{ label: "", price: 750, period: "ל-10 שיעורים" }],
       cta: "לרכישה",
-      message: () => "היי, אשמח לרכוש כרטיסייה של 10 שיעורים (750 ₪)",
     },
   ],
 };
@@ -335,6 +339,8 @@ export const contactSection = {
   },
   submit: "שליחה",
   thanks: "תודה! נחזור אלייך בקרוב",
+  formMessage: (name: string, phone: string, interest: string) =>
+    `שם: ${name}\nטלפון: ${phone}${interest ? `\nשיעור: ${interest}` : ""}`,
   thanksNote: "בינתיים אפשר להציץ במערכת השעות.",
   whatsappPrompt: "מעדיפה לכתוב ישר?",
   whatsappButton: "כתבי לנו בוואטסאפ",
@@ -351,12 +357,26 @@ export const credits = [
     href: "https://commons.wikimedia.org/w/index.php?curid=179905146",
   },
   {
-    label: "רפורמר ליד חלון",
-    work: "Pilates reformer · Maddi Bazzocco · CC0 · Wikimedia Commons",
-    href: "https://commons.wikimedia.org/w/index.php?curid=77785256",
+    label: "רפורמר",
+    work: "Radhika's Balanced Body · Radhika Karle · CC BY-SA 4.0 · Wikimedia Commons",
+    href: "https://commons.wikimedia.org/wiki/File:Radhika%27s_Balanced_Body.jpg",
+  },
+  {
+    label: "בר",
+    work: "Barre class 2 · CCFoodTravel.com · CC BY 2.0 · Wikimedia Commons",
+    href: "https://commons.wikimedia.org/wiki/File:Barre_class_2.jpg",
   },
   { label: "שאר התמונות", work: "Unsplash", href: "https://unsplash.com/license" },
 ];
+
+// ── אתר לדוגמה (הפנייה אליי) ───────────────────────────────
+export const demo = {
+  title: "זה אתר לדוגמה",
+  text: "בניתי את האתר הזה כדי להראות איך יכול להיראות אתר לסטודיו שלך — עם השם, התמונות, השיעורים ומערכת השעות שלך. מוכן תוך שבוע.",
+  button: "רוצה אתר כזה? דברי איתי בוואטסאפ",
+  bar: "אתר לדוגמה · רוצה כזה לסטודיו שלך?",
+  barClose: "סגירת הפס",
+};
 
 export const footer = {
   copyright: "© 2026 סטודיו ליה · כל הזכויות שמורות",

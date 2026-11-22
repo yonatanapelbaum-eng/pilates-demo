@@ -10,14 +10,17 @@ const inputClass =
 export default function Contact() {
   const [sent, setSent] = useState(false);
 
+  // The form opens WhatsApp with the fixed message plus what was filled in.
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Demo: nothing is sent anywhere. Connect a form service or an API route here for a real client.
+    const data = new FormData(e.currentTarget);
+    const get = (k: string) => String(data.get(k) ?? "").trim();
+    window.open(waLink(c.formMessage(get("name"), get("phone"), get("interest"))), "_blank", "noopener,noreferrer");
     setSent(true);
   };
 
   return (
-    <section id="contact" data-own-whatsapp aria-labelledby="contact-title" className="px-3 pb-24 pt-8 md:px-8 lg:pb-40 lg:pt-16">
+    <section id="contact" data-hide-float aria-labelledby="contact-title" className="px-3 pb-14 pt-4 md:px-8 lg:pb-24 lg:pt-8">
       <div className="mx-auto max-w-page">
         {/* The trial class as a coupon to tear off. */}
         <div
@@ -102,7 +105,7 @@ export default function Contact() {
         </div>
 
         {/* Write directly, find the door, see the map. */}
-        <div className="mt-14 grid gap-12 lg:mt-20 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+        <div className="mt-10 grid gap-10 lg:mt-16 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
           <div data-reveal className="flex flex-col gap-10">
             <div>
               <p className="text-lead font-semibold">{c.whatsappPrompt}</p>

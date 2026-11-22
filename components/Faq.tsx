@@ -23,13 +23,13 @@ export default function Faq() {
   };
 
   return (
-    <section id="faq" aria-labelledby="faq-title" className="px-4 py-24 md:px-8 lg:py-40">
+    <section id="faq" aria-labelledby="faq-title" className="px-4 py-14 md:px-8 lg:py-24">
       <div className="mx-auto max-w-page lg:grid lg:grid-cols-12 lg:gap-8">
         <h2 id="faq-title" data-reveal className="text-title lg:col-span-4">
           {faqSection.title}
         </h2>
 
-        <ol className="mt-16 [--step:36px] lg:col-span-8 lg:mt-4 lg:[--step:104px]" aria-label="שאלות נפוצות">
+        <ol className="mt-12 [--step:36px] lg:col-span-8 lg:mt-4 lg:[--step:104px]" aria-label="שאלות נפוצות">
           {faqSection.items.map((item, i) => {
             const isOpen = open === i;
             const g = grounds[i % grounds.length];

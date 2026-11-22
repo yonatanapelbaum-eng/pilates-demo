@@ -3,7 +3,7 @@ import { Stars } from "./Icons";
 
 export default function Testimonials() {
   return (
-    <section aria-labelledby="testimonials-title" className="py-24 lg:py-40">
+    <section aria-labelledby="testimonials-title" className="py-14 lg:py-24">
       <div className="mx-auto max-w-page px-4 md:px-8">
         <h2 id="testimonials-title" data-reveal className="text-title">
           {testimonialsSection.title}
@@ -13,7 +13,7 @@ export default function Testimonials() {
       {/* Phone: a thumb-scrolled row that snaps; desktop: three quotations stepping down the page. */}
       <ul
         data-reveal
-        className="mt-10 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] md:px-8 lg:mx-auto lg:mt-16 lg:grid lg:max-w-page lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
+        className="mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 [scrollbar-width:none] md:px-8 lg:mx-auto lg:mt-12 lg:grid lg:max-w-page lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
         aria-label="המלצות של מתאמנות"
       >
         {testimonialsSection.items.map((t, i) => (
