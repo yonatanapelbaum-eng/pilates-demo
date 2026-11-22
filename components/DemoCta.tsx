@@ -19,7 +19,7 @@ export default function DemoCta() {
           href={waLink()}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn btn-whatsapp mt-8 min-h-[60px] w-full shrink-0 px-8 lg:mt-0 lg:w-auto"
+          className="btn btn-whatsapp mt-8 min-h-[60px] w-full shrink-0 px-6 py-3 text-center leading-snug lg:mt-0 lg:w-auto lg:px-8"
         >
           <WhatsAppIcon className="h-7 w-7" />
           {demo.button}

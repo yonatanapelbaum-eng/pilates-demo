@@ -3,7 +3,7 @@ import { Carriages, InstagramIcon, WhatsAppIcon } from "./Icons";
 
 export default function Footer() {
   return (
-    <footer data-hide-float className="bg-sand px-4 pb-32 pt-14 md:px-8 lg:pb-24 lg:pt-20">
+    <footer data-hide-float className="bg-sand px-4 pb-24 pt-14 md:px-8 lg:pb-24 lg:pt-20">
       <div className="mx-auto max-w-page">
         {/* The name returns at full width, built from the same capsule as everything else. */}
         <div aria-hidden="true" className="flex items-end justify-between gap-6">

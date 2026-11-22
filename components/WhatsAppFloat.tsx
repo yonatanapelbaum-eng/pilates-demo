@@ -58,14 +58,15 @@ export default function WhatsAppFloat() {
         aria-hidden={hidden || undefined}
         tabIndex={hidden ? -1 : undefined}
         className={`fixed left-3 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-whatsapp text-ink transition-[transform,opacity,bottom] duration-300 hover:-translate-y-0.5 active:scale-95 md:left-6 ${
-          barOpen ? "bottom-[60px]" : "bottom-3 md:bottom-6"
+          // On phones the bar already opens WhatsApp, so the round button waits until the bar is closed.
+          barOpen ? "hidden bottom-[60px] md:flex" : "bottom-[calc(12px+env(safe-area-inset-bottom))] md:bottom-6"
         } ${hidden ? "pointer-events-none translate-y-4 opacity-0" : "opacity-100"}`}
       >
         <WhatsAppIcon className="h-6 w-6" />
       </a>
 
       {barOpen && (
-        <div className="fixed inset-x-0 bottom-0 z-[60] flex h-12 items-stretch bg-ink text-cream">
+        <div className="fixed inset-x-0 bottom-0 z-[60] flex items-stretch bg-ink pb-[env(safe-area-inset-bottom)] text-cream [&>*]:min-h-12">
           <a
             href={waLink()}
             target="_blank"

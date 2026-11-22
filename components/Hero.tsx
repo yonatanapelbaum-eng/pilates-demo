@@ -4,20 +4,20 @@ import { hero, images } from "@/data/studio";
 export default function Hero() {
   return (
     <section id="top" data-hide-float aria-labelledby="hero-title" className="relative pb-10 pt-2 lg:pb-16 lg:pt-6">
-      <div className="mx-auto flex max-w-page flex-col gap-8 px-4 md:px-8 lg:flex-row lg:items-center lg:gap-14">
+      <div className="mx-auto flex max-w-page flex-col gap-6 px-4 md:px-8 lg:flex-row lg:items-center lg:gap-14">
         {/* Text: the start (right) side on desktop, below the picture on a phone. */}
         <div className="order-2 lg:order-1 lg:w-[46%]">
-          <h1 id="hero-title" data-reveal className="text-display md:text-[clamp(40px,7.4vw,80px)] lg:text-display">
+          <h1 id="hero-title" data-reveal className="text-[clamp(32px,10.4vw,44px)] font-medium leading-[1.05] tracking-[-0.025em] md:text-[clamp(40px,7.4vw,80px)] lg:text-display">
             {hero.title}
           </h1>
           <p data-reveal className="mt-5 max-w-[34ch] text-body lg:mt-7 lg:text-lead">
             {hero.subtitle}
           </p>
-          <div data-reveal className="mt-7 flex flex-wrap gap-3 lg:mt-9">
-            <a href={hero.primary.href} className="btn btn-primary">
+          <div data-reveal className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:mt-9">
+            <a href={hero.primary.href} className="btn btn-primary w-full sm:w-auto">
               {hero.primary.label}
             </a>
-            <a href={hero.secondary.href} className="btn btn-outline">
+            <a href={hero.secondary.href} className="btn btn-outline w-full sm:w-auto">
               {hero.secondary.label}
             </a>
           </div>

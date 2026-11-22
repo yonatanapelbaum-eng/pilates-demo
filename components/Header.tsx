@@ -23,10 +23,10 @@ export default function Header() {
       <a href="#main" className="sr-only-focusable absolute right-4 top-3 z-50 rounded-full bg-ink px-5 py-3 text-cream">
         דילוג לתוכן
       </a>
-      <div className="mx-auto flex h-[72px] max-w-page items-center justify-between gap-6 px-4 md:px-8">
+      <div className="mx-auto flex h-[60px] max-w-page lg:h-[72px] items-center justify-between gap-6 px-4 md:px-8">
         <a href="#top" className="flex flex-col leading-none">
-          <span className="font-display text-lead font-medium tracking-[-0.02em]">{studio.name}</span>
-          <span className="mt-1 text-small font-semibold">{studio.tagline}</span>
+          <span className="font-display text-[22px] font-medium lg:text-lead tracking-[-0.02em]">{studio.name}</span>
+          <span className="mt-0.5 text-small font-semibold lg:mt-1">{studio.tagline}</span>
         </a>
 
         <nav aria-label="ניווט ראשי" className="hidden lg:block">

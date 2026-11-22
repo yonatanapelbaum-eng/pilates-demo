@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { classTypes, days, schedule, scheduleSection, waLink, type Slot } from "@/data/studio";
-import { ClockIcon } from "./Icons";
+import { classTypes, days, schedule, scheduleSection as s, waLink, type Slot } from "@/data/studio";
+import { ChevronIcon, ClockIcon } from "./Icons";
 
 type Now = { day: number; minutes: number };
 type Next = { day: number; slot: Slot; offset: number; diff: number };
@@ -54,29 +54,15 @@ function countdown(diff: number) {
   return m === 0 ? `מתחיל בעוד ${hours}` : `מתחיל בעוד ${hours} ו-${m} דקות`;
 }
 
-
-function BookButton({ slot, day, tone = "sand" }: { slot: Slot; day: number; tone?: "sand" | "cream" | "ink" }) {
-  const toneClass = tone === "ink" ? "btn-ink" : tone === "cream" ? "btn-cream" : "bg-sand text-ink hover:bg-blush";
-  return (
-    <a
-      href={waLink()}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label={`${scheduleSection.bookLabel}: ${classTypes[slot.type].short}, יום ${days[day].long}, ${slot.time}`}
-      className={`btn min-h-[44px] shrink-0 px-5 text-small ${toneClass}`}
-    >
-      {scheduleSection.bookLabel}
-    </a>
-  );
-}
-
 export default function Schedule() {
+  const [open, setOpen] = useState(false);
   const [today, setToday] = useState<number | null>(null);
   const [active, setActive] = useState(0);
   const [next, setNext] = useState<Next | null>(null);
   const [isSaturday, setIsSaturday] = useState(false);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+  // Live: today's tab and the next class, in Israel time.
   useEffect(() => {
     const tick = () => {
       const now = nowInIsrael();
@@ -91,6 +77,17 @@ export default function Schedule() {
     return () => window.clearInterval(id);
   }, []);
 
+  // Links to #schedule (menu, hero) open the full timetable.
+  useEffect(() => {
+    if (window.location.hash === "#schedule") setOpen(true);
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as Element | null)?.closest?.('a[href="#schedule"]');
+      if (a) setOpen(true);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   const onTabKey = (e: React.KeyboardEvent, i: number) => {
     // RTL: the arrow pointing left moves forward in the week.
     const step = e.key === "ArrowLeft" ? 1 : e.key === "ArrowRight" ? -1 : 0;
@@ -102,52 +99,56 @@ export default function Schedule() {
   };
 
   const isNext = (d: number, slot: Slot) => next !== null && next.day === d && next.slot === slot;
-  const maxRows = Math.max(...schedule.map((s) => s.length));
 
   return (
     <section id="schedule" data-hide-float aria-labelledby="schedule-title" className="px-4 py-14 md:px-8 lg:py-24">
-      <div className="mx-auto max-w-page">
-        <div className="lg:flex lg:items-end lg:justify-between lg:gap-12">
-          <h2 id="schedule-title" data-reveal className="text-title">
-            {scheduleSection.title}
-          </h2>
+      <div className="mx-auto max-w-[760px]">
+        <h2 id="schedule-title" data-reveal className="text-title">
+          {s.title}
+        </h2>
+        <p data-reveal className="mt-3 max-w-[44ch]">
+          {s.intro}
+        </p>
 
-          {/* The live line: what's next, counted down in Israel time. */}
-          <div data-reveal aria-live="polite" className="mt-6 min-h-[112px] lg:mt-0 lg:min-w-[520px]">
-            {next && (
-              <div className="flex flex-col gap-4 rounded-panel bg-blush p-5 sm:flex-row sm:items-center sm:justify-between sm:rounded-full sm:py-4 sm:pl-4 sm:pr-7">
-                <div>
-                  <p className="flex items-center gap-2 text-small font-bold">
-                    <ClockIcon className="h-[18px] w-[18px]" />
-                    {scheduleSection.nextLabel}
-                    {countdown(next.diff) && <span className="font-semibold">· {countdown(next.diff)}</span>}
-                  </p>
-                  <p className="mt-1 font-bold leading-snug">
-                    {whenLabel(next)} ב-<span className="tabular">{next.slot.time}</span> · {classTypes[next.slot.type].short} עם{" "}
-                    {next.slot.teacher}
-                  </p>
-                </div>
-                <BookButton slot={next.slot} day={next.day} tone="ink" />
+        {/* The live line: what's next, counted down in Israel time. */}
+        <div data-reveal aria-live="polite" className="mt-8 min-h-[96px]">
+          {next && (
+            <div className="flex flex-col gap-4 rounded-3xl bg-sand p-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+              <div>
+                <p className="flex flex-wrap items-center gap-x-2 text-small font-bold">
+                  <ClockIcon className="h-[18px] w-[18px]" />
+                  <span>{s.nextLabel}</span>
+                  {countdown(next.diff) && <span className="w-full font-semibold sm:w-auto">{countdown(next.diff)}</span>}
+                </p>
+                <p className="mt-1 text-lead">
+                  {whenLabel(next)} <span className="tabular">{next.slot.time}</span> · {classTypes[next.slot.type].short} עם{" "}
+                  {next.slot.teacher}
+                </p>
               </div>
-            )}
-          </div>
+              <a href={waLink()} target="_blank" rel="noopener noreferrer" className="btn btn-ink min-h-[44px] shrink-0 px-6">
+                {s.bookLabel}
+              </a>
+            </div>
+          )}
         </div>
 
-        {isSaturday && <p className="mt-6 font-semibold">{scheduleSection.saturdayNote}</p>}
+        <button
+          type="button"
+          data-reveal
+          aria-expanded={open}
+          aria-controls="schedule-week"
+          onClick={() => setOpen((o) => !o)}
+          className="js-only mt-4 inline-flex min-h-[48px] items-center gap-2 rounded-full px-1 font-bold underline-offset-[6px] hover:underline"
+        >
+          {open ? s.hideAll : s.showAll}
+          <ChevronIcon className={`h-5 w-5 transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+        </button>
 
-        {/* Legend */}
-        <ul data-reveal className="mt-8 flex flex-wrap gap-x-6 gap-y-3 lg:mt-12" aria-label="סוגי שיעורים">
-          {Object.entries(classTypes).map(([key, c]) => (
-            <li key={key} className="flex items-center gap-2 text-small font-semibold">
-              <span className={`block h-2.5 w-6 rounded-full ${c.dot}`} aria-hidden="true" />
-              {c.short}
-            </li>
-          ))}
-        </ul>
+        {/* The full week: collapsed until asked for (always shown without script). */}
+        <div id="schedule-week" className={open ? "mt-6" : "js-hide"}>
+          {isSaturday && <p className="mb-4 font-semibold">{s.saturdayNote}</p>}
 
-        {/* Phone and tablet: day tabs + list */}
-        <div className="mt-8 lg:hidden">
-          <div role="tablist" aria-label="ימי השבוע" className="js-only grid grid-cols-6 gap-1.5">
+          <div role="tablist" aria-label="ימי השבוע" className="js-only flex gap-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {days.map((d, i) => (
               <button
                 key={d.short}
@@ -161,112 +162,61 @@ export default function Schedule() {
                 tabIndex={active === i ? 0 : -1}
                 onClick={() => setActive(i)}
                 onKeyDown={(e) => onTabKey(e, i)}
-                className={`relative flex h-12 flex-col items-center justify-center rounded-full text-body font-bold transition-colors duration-200 ${
-                  active === i ? "bg-ink text-cream" : "bg-sand text-ink hover:bg-blush"
+                className={`flex min-h-[44px] min-w-[44px] shrink-0 flex-1 flex-col items-center justify-center rounded-full px-2 font-bold transition-colors duration-200 sm:flex-none sm:px-5 ${
+                  active === i ? "bg-ink text-cream" : "text-ink hover:bg-sand"
                 }`}
               >
-                <span aria-hidden="true">{d.short}</span>
-                <span className="sr-only">יום {d.long}</span>
-                {today === i && (
-                  <span
-                    className={`absolute bottom-1.5 h-1 w-1 rounded-full ${active === i ? "bg-blush" : "bg-ink"}`}
-                    aria-hidden="true"
-                  />
-                )}
+                <span className="sm:hidden" aria-hidden="true">
+                  {d.short}
+                </span>
+                <span className="hidden sm:inline" aria-hidden="true">
+                  {d.long}
+                </span>
+                <span className="sr-only">
+                  יום {d.long}
+                  {today === i ? ", היום" : ""}
+                </span>
+                {today === i && <span className={`mt-0.5 h-1 w-1 rounded-full ${active === i ? "bg-blush" : "bg-ink"}`} aria-hidden="true" />}
               </button>
             ))}
           </div>
 
           {days.map((d, i) => (
-            <div
-              key={d.short}
-              id={`day-${i}`}
-              role="tabpanel"
-              aria-labelledby={`tab-${i}`}
-              className={`mt-6 ${active === i ? "" : "js-hide"}`}
-            >
-              <h3 className="nojs-only mb-3 mt-8 text-lead">יום {d.long}</h3>
-              <ul className="flex flex-col gap-2.5">
+            <div key={d.short} id={`day-${i}`} role="tabpanel" aria-labelledby={`tab-${i}`} className={active === i ? "mt-4" : "js-hide"}>
+              <h3 className="nojs-only mb-2 mt-8 text-lead">יום {d.long}</h3>
+              <ul>
                 {schedule[i].map((slot) => {
                   const c = classTypes[slot.type];
                   const hot = isNext(i, slot);
                   return (
                     <li
                       key={slot.time}
-                      className={`flex min-h-[72px] items-center gap-4 rounded-full py-2 pl-2 pr-6 ${hot ? "bg-blush" : "bg-sand"}`}
+                      className={`flex min-h-[64px] items-center gap-4 rounded-2xl px-3 py-2 sm:gap-6 sm:px-4 ${hot ? "bg-sand" : ""}`}
                     >
-                      <span className="w-[64px] shrink-0 font-display text-lead font-medium tabular">{slot.time}</span>
+                      <span className="w-[56px] shrink-0 text-lead font-medium font-display tabular sm:w-[64px]">{slot.time}</span>
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-2 font-semibold">
-                          <span className={`block h-2.5 w-5 shrink-0 rounded-full ${c.dot}`} aria-hidden="true" />
+                          <span className={`block h-2 w-2 shrink-0 rounded-full ${c.dot}`} aria-hidden="true" />
                           {c.short}
+                          {hot && <span className="rounded-full bg-ink px-2.5 py-0.5 text-small font-bold leading-tight text-cream">{s.nextTag}</span>}
                         </span>
                         <span className="block text-small">עם {slot.teacher}</span>
                       </span>
-                      <BookButton slot={slot} day={i} tone={hot ? "ink" : "cream"} />
+                      <a
+                        href={waLink()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`${s.bookLabel}: ${c.short}, יום ${d.long}, ${slot.time}`}
+                        className="inline-flex min-h-[44px] shrink-0 items-center rounded-full px-3 text-small font-bold underline underline-offset-4 transition-colors hover:bg-sand"
+                      >
+                        {s.bookLabel}
+                      </a>
                     </li>
                   );
                 })}
               </ul>
             </div>
           ))}
-        </div>
-
-        {/* Desktop: the week as a table */}
-        <div data-reveal className="mt-10 hidden lg:block">
-          <table className="w-full table-fixed border-separate border-spacing-x-2 border-spacing-y-0">
-            <caption className="sr-only">{scheduleSection.title}</caption>
-            <thead>
-              <tr>
-                {days.map((d, i) => (
-                  <th
-                    key={d.short}
-                    scope="col"
-                    className={`rounded-t-panel px-4 pb-4 pt-6 text-start font-display text-lead font-medium ${
-                      today === i ? "bg-sand" : ""
-                    }`}
-                  >
-                    {d.long}
-                    {today === i && <span className="block text-small">היום</span>}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: maxRows }).map((_, r) => (
-                <tr key={r}>
-                  {days.map((d, i) => {
-                    const slot = schedule[i][r];
-                    const last = r === maxRows - 1;
-                    return (
-                      <td
-                        key={d.short}
-                        className={`px-2 pb-2 align-top ${today === i ? "bg-sand" : ""} ${last ? "rounded-b-panel pb-4" : ""}`}
-                      >
-                        {slot && (
-                          <div
-                            className={`flex h-full flex-col gap-1 rounded-panel p-4 transition-colors ${
-                              isNext(i, slot) ? "bg-blush" : today === i ? "bg-cream" : "bg-sand"
-                            }`}
-                          >
-                            <span className="font-display text-lead font-medium tabular">{slot.time}</span>
-                            <span className="flex items-center gap-2 font-semibold leading-snug">
-                              <span className={`block h-2.5 w-5 shrink-0 rounded-full ${classTypes[slot.type].dot}`} aria-hidden="true" />
-                              {classTypes[slot.type].short}
-                            </span>
-                            <span className="text-small">עם {slot.teacher}</span>
-                            <span className="mt-3">
-                              <BookButton slot={slot} day={i} tone={isNext(i, slot) ? "ink" : today === i ? "sand" : "cream"} />
-                            </span>
-                          </div>
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </div>
     </section>
